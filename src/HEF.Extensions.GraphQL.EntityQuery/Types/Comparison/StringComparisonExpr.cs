@@ -16,11 +16,11 @@ namespace HEF.Extensions.GraphQL.EntityQuery
 
         public bool? _is_null { get; set; }
 
-        //public string[] _in { get; set; }
+        public string[] _in { get; set; }
 
         public string _neq { get; set; }
 
-        //public string[] _nin { get; set; }
+        public string[] _nin { get; set; }
 
         public string _prelike { get; set; }
 
@@ -35,9 +35,9 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         {
             Description = "expression to compare columns of type String. All fields are combined with logical 'AND'.";
 
-            Field<StringGraphType>("_prelike");
-            Field<StringGraphType>("_like");
-            Field<StringGraphType>("_suflike");
+            Field<StringGraphType>("_prelike", "StartsWith");
+            Field<StringGraphType>("_like", "Contains");
+            Field<StringGraphType>("_suflike", "EndsWith");
         }
     }
 }

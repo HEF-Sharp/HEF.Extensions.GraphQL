@@ -16,11 +16,11 @@ namespace HEF.Extensions.GraphQL.EntityQuery
 
         public bool? _is_null { get; set; }
 
-        //public TStruct[] _in { get; set; }
+        public TStruct[] _in { get; set; }
 
         public TStruct? _neq { get; set; }
 
-        //public TStruct[] _nin { get; set; }
+        public TStruct[] _nin { get; set; }
     }
 
     public abstract class ComparisonExpr_Type<TGraphType> : InputObjectGraphType
@@ -28,15 +28,15 @@ namespace HEF.Extensions.GraphQL.EntityQuery
     {
         public ComparisonExpr_Type()
         {
-            Field<TGraphType>("_eq");
-            Field<TGraphType>("_gt");
-            Field<TGraphType>("_gte");
-            Field<TGraphType>("_lt");
-            Field<TGraphType>("_lte");
-            Field<BooleanGraphType>("_is_null");
-            //Field<ListGraphType<NonNullGraphType<TGraphType>>>("_in");
-            Field<TGraphType>("_neq");
-            //Field<ListGraphType<NonNullGraphType<TGraphType>>>("_nin");
+            Field<TGraphType>("_eq", "Equal");
+            Field<TGraphType>("_gt", "GreaterThan");
+            Field<TGraphType>("_gte", "GreaterThanOrEqual");
+            Field<TGraphType>("_lt", "LessThan");
+            Field<TGraphType>("_lte", "LessThanOrEqual");
+            Field<BooleanGraphType>("_is_null", "Is Null Or Not");
+            Field<ListGraphType<NonNullGraphType<TGraphType>>>("_in", "In");
+            Field<TGraphType>("_neq", "NotEqual");
+            Field<ListGraphType<NonNullGraphType<TGraphType>>>("_nin", "Not In");
         }
     }
 }
