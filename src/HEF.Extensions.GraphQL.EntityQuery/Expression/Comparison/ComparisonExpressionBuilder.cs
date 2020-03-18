@@ -1,6 +1,6 @@
-﻿using HEF.Data.Query;
+﻿using GraphQL;
+using HEF.Data.Query;
 using HEF.Entity.Mapper;
-using HEF.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,10 +30,9 @@ namespace HEF.Extensions.GraphQL.EntityQuery
                     throw new ArgumentNullException(nameof(comparisonValue));
 
                 var enumerablePropertyType = typeof(IEnumerable<>).MakeGenericType(property.PropertyInfo.PropertyType);
-                if (!comparisonValue.GetType().Is(enumerablePropertyType))
-                    throw new ArgumentException($"comparisonValue should be typeof {enumerablePropertyType}");
+                var enumerableComparisonValue = comparisonValue.GetPropertyValue(enumerablePropertyType);
 
-                return Expression.Constant(comparisonValue, enumerablePropertyType);
+                return Expression.Constant(enumerableComparisonValue, enumerablePropertyType);
             };
         }
 
@@ -162,9 +161,11 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         public Expression BuildPropertyComparisonExpression(ParameterExpression entityParameter,
             IPropertyMap property, object comparisonValue)
         {
+            var enumerableContainsMethod = EnumerableMethods.Contains.MakeGenericMethod(property.PropertyInfo.PropertyType);
+
             return ComparisonExpressionBuilder.BuildPropertyComparisonExpression(
                 entityParameter, property, ComparisonExpressionBuilder.BuildEnumerableComparisonValueGetter(comparisonValue),
-                (propertyExpr, comparisonValueExpr) => Expression.Call(EnumerableMethods.Contains, comparisonValueExpr, propertyExpr));
+                (propertyExpr, comparisonValueExpr) => Expression.Call(enumerableContainsMethod, comparisonValueExpr, propertyExpr));
         }
     }
 
@@ -175,9 +176,11 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         public Expression BuildPropertyComparisonExpression(ParameterExpression entityParameter,
             IPropertyMap property, object comparisonValue)
         {
+            var enumerableContainsMethod = EnumerableMethods.Contains.MakeGenericMethod(property.PropertyInfo.PropertyType);
+
             return ComparisonExpressionBuilder.BuildPropertyComparisonExpression(
                 entityParameter, property, ComparisonExpressionBuilder.BuildEnumerableComparisonValueGetter(comparisonValue),
-                (propertyExpr, comparisonValueExpr) => Expression.Not(Expression.Call(EnumerableMethods.Contains, comparisonValueExpr, propertyExpr)));
+                (propertyExpr, comparisonValueExpr) => Expression.Not(Expression.Call(enumerableContainsMethod, comparisonValueExpr, propertyExpr)));
         }
     }
 
