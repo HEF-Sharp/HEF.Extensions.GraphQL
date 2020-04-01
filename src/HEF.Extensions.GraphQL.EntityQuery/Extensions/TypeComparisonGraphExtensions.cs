@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace HEF.Extensions.GraphQL.EntityQuery
 {
-    internal static class TypeExtensions
+    internal static class TypeComparisonGraphExtensions
     {
         private static readonly IDictionary<Type, Type> _comparisonExprGraphTypeMapping = new Dictionary<Type, Type>();
 
-        static TypeExtensions()
+        static TypeComparisonGraphExtensions()
         {
             InitComparisonExprGraphMapping();
         }
