@@ -21,9 +21,7 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         {
             var entityMapper = MapperProvider.GetEntityMapper<TEntity>();
 
-            var entityOrderByGraphTypeFactory = LambdaExpressionCache.GetLambdaExpression<Func<InputObjectGraphType>>(
-                $"{GetEntityOrderByTypeName<TEntity>()}_Factory",
-                (key) => BuildEntityOrderByGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray()));
+            var entityOrderByGraphTypeFactory = BuildEntityOrderByGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray());
 
             var entityOrderByType = entityOrderByGraphTypeFactory.Compile().Invoke();
             return new QueryArgument(new ListGraphType(new NonNullGraphType(entityOrderByType)))

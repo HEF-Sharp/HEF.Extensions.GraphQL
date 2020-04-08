@@ -23,9 +23,7 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         {
             var entityMapper = MapperProvider.GetEntityMapper<TEntity>();
 
-            var entityGraphTypeFactory = LambdaExpressionCache.GetLambdaExpression<Func<ObjectGraphType<TEntity>>>(
-                $"{GetEntityGraphTypeName<TEntity>()}_Factory",
-                (key) => BuildEntityGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray()));
+            var entityGraphTypeFactory = BuildEntityGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray());
 
             return entityGraphTypeFactory.Compile().Invoke();
         }

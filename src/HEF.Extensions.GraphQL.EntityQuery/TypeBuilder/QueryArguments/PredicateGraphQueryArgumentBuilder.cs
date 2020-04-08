@@ -22,9 +22,7 @@ namespace HEF.Extensions.GraphQL.EntityQuery
         {
             var entityMapper = MapperProvider.GetEntityMapper<TEntity>();
 
-            var entityPredicateGraphTypeFactory = LambdaExpressionCache.GetLambdaExpression<Func<InputObjectGraphType>>(
-                $"{GetEntityPredicateTypeName<TEntity>()}_Factory",
-                (key) => BuildEntityPredicateGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray()));
+            var entityPredicateGraphTypeFactory = BuildEntityPredicateGraphTypeFactory<TEntity>(entityMapper.Properties.ToArray());
 
             var entityPredicateType = entityPredicateGraphTypeFactory.Compile().Invoke();
             return new QueryArgument(entityPredicateType) { Name = EntityGraphQueryConstants.GraphQueryArgumnet_Where };
